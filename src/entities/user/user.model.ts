@@ -21,7 +21,7 @@ export const mockUserList: UserModel[] = [
         id: nanoid(),
         username: 'test02',
         password: '1q2w3e!@',
-        nickname: '테스터01',
+        nickname: '테스터02',
         createdAt: new Date()
     }
 ];

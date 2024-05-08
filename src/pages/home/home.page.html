@@ -1,5 +1,8 @@
 <div class="p-10">
-    <div class="mockup-window border border-base-300">
-        <div class="flex justify-center px-4 py-16 border-t border-base-300">Hello World!</div>
-    </div>
+    @if(userService.state(); as user) {
+        <div>ID: {{user.id}}</div>
+        <div>아이디: {{user.id}}</div>
+        <div>닉네임: {{user.nickname}}</div>
+        <div>생성일: {{user.createdAt|date:'yyyy.mm.dd'}}</div>
+    }
 </div>

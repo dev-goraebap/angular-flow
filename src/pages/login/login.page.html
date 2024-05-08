@@ -1,0 +1,18 @@
+<div class="p-10">
+    <form [formGroup]="formGroup" class="w-full max-w-[250px]" (submit)="onLogin()">
+        <label class="form-control w-full">
+            <div class="label">
+                <span class="label-text">username</span>
+            </div>
+            <input type="text" placeholder="아이디를 입력해 주세요..." class="input input-bordered w-full" formControlName="username"/>
+        </label>
+        <label class="form-control w-full">
+            <div class="label">
+                <span class="label-text">password</span>
+            </div>
+            <input type="password" placeholder="비밀번호를 입력해 주세요..." class="input input-bordered w-full" formControlName="password"/>
+        </label>
+        <br/>
+        <button type="submit" class="btn w-full">로그인</button>
+    </form>
+</div>

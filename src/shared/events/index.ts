@@ -1,2 +1,3 @@
-export * from './event-bus';
-export * from './event.model';
+export * from './event.bus';
+export * from './action.model';
+

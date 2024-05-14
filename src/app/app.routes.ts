@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { AuthGuard } from './guards';
+import { AuthGuard, PublicGuard } from 'src/features';
 
 export const routes: Routes = [
     {
@@ -9,11 +9,17 @@ export const routes: Routes = [
     },
     {
         path: 'login',
+        canActivate: [PublicGuard],
         loadComponent: () => import('../pages').then(m => m.LoginPage)
     },
     {
-        path: 'home',
+        path: 'register',
+        canActivate: [PublicGuard],
+        loadComponent: () => import('../pages').then(m => m.RegisterPage)
+    },
+    {
+        path: 'dashboard',
         canActivate: [AuthGuard],
-        loadComponent: () => import('../pages').then(m => m.HomePage)
-    }
+        loadComponent: () => import('../pages').then(m => m.DashboardPage)
+    },
 ];

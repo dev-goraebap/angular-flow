@@ -1,2 +1,3 @@
-export * from './events';
-export * from './local-storage';
+export * from './components';
+export * from './environments';
+export * from './libs';

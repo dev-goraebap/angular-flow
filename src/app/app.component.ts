@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { initFirebase } from 'src/shared';
 
 @Component({
   selector: 'app-root',
@@ -11,5 +12,7 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
 
-  constructor() {}
+  constructor() {
+    initFirebase();
+  }
 }

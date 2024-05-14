@@ -13,6 +13,11 @@ export const routes: Routes = [
         loadComponent: () => import('../pages').then(m => m.LoginPage)
     },
     {
+        path: 'register',
+        canActivate: [PublicGuard],
+        loadComponent: () => import('../pages').then(m => m.RegisterPage)
+    },
+    {
         path: 'dashboard',
         canActivate: [AuthGuard],
         loadComponent: () => import('../pages').then(m => m.DashboardPage)

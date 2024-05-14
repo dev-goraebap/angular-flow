@@ -7,14 +7,22 @@ import { ToastController } from "./toast.controller";
     standalone: true,
     imports: [CommonModule],
     template: `
-    <div 
-        class="toast toast-center toast-top pointer-events-none visible transition duration-300
-        {{ toast().activate ? 'opacity-100' : 'opacity-0' }}
-        ">
-        <div class="alert alert-warning transition-none">
-            <span>{{toast().message}}</span>
+    @if (toast(); as toast) {
+        <div 
+            class="toast toast-center toast-top pointer-events-none visible transition duration-300
+            {{ toast.activate ? 'opacity-100' : 'opacity-0' }}">
+            <div 
+                class="alert alert-warning transition-none"
+                [ngClass]="{
+                'alert-info': toast.status === 'info',
+                'alert-success': toast.status === 'success',
+                'alert-warning': toast.status === 'warning',
+                'alert-error': toast.status === 'error',
+                }">
+                <span>{{toast.message}}</span>
+            </div>
         </div>
-    </div>
+    }
     `
 })
 export class ToastComponent {

@@ -12,7 +12,7 @@ export const AuthGuard: CanActivateFn = () => {
     return authService.loggedInEvent().pipe(
         map(loggedIn => {
             if (!loggedIn) {
-                toastController.show("로그인이 필요합니다.");
+                toastController.show('로그인이 필요합니다.', 'warning');
                 router.navigateByUrl('/login');
                 return false;
             } 

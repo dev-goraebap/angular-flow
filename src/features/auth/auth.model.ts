@@ -4,5 +4,5 @@ export type CredentialModel = {
 };
 
 export type RegisterModel = CredentialModel & {
-    username: string;
+    nickname: string;
 }

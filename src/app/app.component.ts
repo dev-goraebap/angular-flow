@@ -13,12 +13,14 @@ import { ToastComponent, initFirebase } from 'src/shared';
   ],
   template: `
   @if (!checkCredentials) {
-    <div class="fixed inset-0 bg-white flex justify-center items-center">
+    <div class="fixed inset-0 bg-amber-200 flex justify-center items-center">
       <span class="loading loading-ring loading-lg"></span>
     </div>
   } @else {
-    <div>
-      <router-outlet></router-outlet>
+    <div class="h-screen flex justify-center bg-gray-100">
+      <div class="w-full h-full max-w-2xl border-0 sm:border-x bg-white">
+        <router-outlet></router-outlet>
+      </div>
     </div>
   }
   <toast-component />
@@ -37,6 +39,6 @@ export class AppComponent {
     this.authService.loggedInEvent().pipe(
       delay(1000),
       tap(() => this.checkCredentials = true)
-    ).subscribe(console.log);
+    ).subscribe();
   }
 }

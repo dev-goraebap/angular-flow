@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from "@angular/core";
-import { ToastModel } from "./toast.model";
+import { ToastModel, ToastStatus } from "./toast.model";
 
 @Injectable({
     providedIn: 'root'
@@ -7,17 +7,18 @@ import { ToastModel } from "./toast.model";
 export class ToastController {
 
     private readonly _toast = signal<ToastModel>({
+        status: 'info',
         activate: false,
         message: ''
     });
 
     readonly toast = computed(() => this._toast());
 
-    show(message: string, time: number = 2000) {
-        this._toast.set({ activate: true, message });
+    show(message: string, status: ToastStatus = 'info', time: number = 2000) {
+        this._toast.set({ activate: true, status, message });
 
         setTimeout(() => {
-            this._toast.set({ activate: false, message: '' });
+            this._toast.set({ activate: false, status, message });
         }, time);
     }
 }

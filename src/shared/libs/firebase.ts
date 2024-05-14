@@ -9,12 +9,19 @@ const firebaseConfig = {
     projectId: environment.FIREBASE_PROJECT_ID,
 };
 
-let firebaseApp: FirebaseApp | null = null;
+let firebaseApp: FirebaseApp;
 
-export let firebaseAuth: Auth | null = null;
+export let firebaseAuth: Auth;
 
 export const initFirebase = () => {
     console.log('Initializing Firebase ✨');
     firebaseApp = initializeApp(firebaseConfig);
     firebaseAuth = getAuth(firebaseApp);
+}
+
+export type FirebaseUserModel = {
+    uid: string;
+    email: string;
+    displayName: string;
+    photoURL?: string;
 }

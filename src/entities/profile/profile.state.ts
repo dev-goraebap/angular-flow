@@ -11,6 +11,15 @@ export class ProfileState {
 
     readonly profile = computed(() => this._profile());
 
+    getUserId() {
+        const userId = this.profile()?.id;
+        if (!userId) {
+            throw new Error('User ID is not found');
+        }
+
+        return userId;
+    }
+
     initByFirebaseUser(user: User) {
         this._profile.set({
             id: user.uid,

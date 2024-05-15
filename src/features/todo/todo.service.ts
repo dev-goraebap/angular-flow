@@ -1,5 +1,5 @@
 import { Injectable, inject } from "@angular/core";
-import { collection, doc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { nanoid } from "nanoid";
 import { from, tap } from "rxjs";
 import { ProfileState, TodoModel, TodoState } from "src/entities";
@@ -21,7 +21,7 @@ export class TodoService {
         const userId = this.profileState.getUserId();
         const todoCollection = collection(firestore, this.TODO_PATH);
 
-        const q = query(todoCollection, where('userId', '==', userId));
+        const q = query(todoCollection, where('userId', '==', userId), orderBy('createdAt', 'desc'));
         const promise = getDocs(q);
 
         return from(promise).pipe(
@@ -56,6 +56,14 @@ export class TodoService {
         const todoDocRef = doc(firestore, `${this.TODO_PATH}/${id}`);
 
         const promise = updateDoc(todoDocRef, updatedTodo as AddOrEditTodoModel);
+        return from(promise).pipe(
+            tap(() => this.initTodoList())
+        ).subscribe();
+    }
+    
+    removeTodo(todoId: string) {
+        const todoDocRef = doc(firestore, `${this.TODO_PATH}/${todoId}`);
+        const promise = deleteDoc(todoDocRef);
         return from(promise).pipe(
             tap(() => this.initTodoList())
         ).subscribe();

@@ -62,6 +62,8 @@ export class AuthService {
 
     logout() {
         const promise = signOut(firebaseAuth);
-        return from(promise).subscribe();
+        return from(promise).pipe(
+            tap(() => this.router.navigateByUrl('/login'))
+        ).subscribe();
     }
 }

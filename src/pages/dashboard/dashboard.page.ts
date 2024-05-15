@@ -1,12 +1,13 @@
 import { Component, inject } from "@angular/core";
 import { ProfileCardComponent, TodoState, TodoViewComponent } from "src/entities";
-import { AddTodoComponent, EditTodoButtonComponent, RemoveTodoButtonComponent, TodoCheckBoxComponent, TodoService } from "src/features";
+import { AddTodoComponent, EditTodoButtonComponent, LogoutButtonComponent, RemoveTodoButtonComponent, TodoCheckBoxComponent, TodoService } from "src/features";
 
 @Component({
     selector: 'dashboard-page',
     standalone: true,
     imports: [
         ProfileCardComponent,
+        LogoutButtonComponent,
         AddTodoComponent,
         TodoViewComponent,
         TodoCheckBoxComponent,
@@ -15,7 +16,9 @@ import { AddTodoComponent, EditTodoButtonComponent, RemoveTodoButtonComponent, T
     ],
     template: `
     <div class="p-4">
-        <profile-card />
+        <profile-card>
+            <logout-button slot="buttons"/>
+        </profile-card>
         <div class="mt-10"></div>
         <add-todo-form/>
         <br/>

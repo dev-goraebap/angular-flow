@@ -1,8 +1,8 @@
 import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from "@angular/common/http";
 import { inject } from "@angular/core";
-import { EMPTY, catchError, from, switchMap, throwError } from "rxjs";
+import { EMPTY, catchError, throwError } from "rxjs";
 import { OAuth2Service } from "./oauth2.service";
-import { promiseSafe } from "./oauth2.utils";
+import { REFRESH_TOKEN_MOCK_URL } from "./token-refresh.behavior";
 import { TOKEN_STORAGE } from "./token-storage/token.storage";
 
 /**
@@ -27,50 +27,41 @@ import { TOKEN_STORAGE } from "./token-storage/token.storage";
  */
 export const oauth2Interceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
 
-    console.log(req.url);
-    if (req.url.includes('REFRESH_TOKENS_MOCK_URL')) {
-        console.log('refresh token mock url 요청 중...');
+    if (req.url.includes(REFRESH_TOKEN_MOCK_URL)) {
         return next(req);
     }
 
     const oauth2Service = inject(OAuth2Service);
-    const bearerTokenStorage = inject(TOKEN_STORAGE);
+    const { accessToken } = inject(TOKEN_STORAGE);
 
-    const promise = promiseSafe(bearerTokenStorage.getAccessToken());
-    return from(promise).pipe(
-        switchMap(accessToken => {
-            // 엑세스토큰을 조회하고 있다면 요청 헤더에 추가
-            if (accessToken) {
-                req = req.clone({
-                    setHeaders: {
-                        Authorization: `Bearer ${accessToken}`
-                    }
-                });
+    // 엑세스토큰을 조회하고 있다면 요청 헤더에 추가
+    if (accessToken()) {
+        req = req.clone({
+            setHeaders: {
+                Authorization: `Bearer ${accessToken()}`
+            }
+        });
+    }
+
+    // 요청 진행 
+    return next(req).pipe(
+        catchError((res: HttpErrorResponse) => {
+            // 401 Unauthorized 에러가 아니면 예외를 그대로 방출
+            if (res.status !== 401) {
+                return throwError(() => res);
             }
 
-            // 요청 진행 
-            return next(req).pipe(
-                catchError((res: HttpErrorResponse) => {
-                    // 401 Unauthorized 에러가 아니면 예외를 그대로 방출
-                    if (res.status !== 401) {
-                        return throwError(() => res);
-                    }
+            console.log('실패한 요청 대기열 큐에 저장중.. 🛒');
+            oauth2Service.addPendingRequest({ req, next });
 
-                    console.log('실패한 요청 대기열 큐에 저장중.. 🛒');
-                    oauth2Service.addPendingRequest({ req, next });
+            if (oauth2Service.isRefreshing) {
+                console.log('기존의 토큰 재발급 플로우 진행중... 새로운 토큰 재발급 요청 캔슬 ❌');
+                return EMPTY;
+            }
 
-                    if (oauth2Service.isRefreshing) {
-                        console.log('기존의 토큰 재발급 플로우 진행중... 새로운 토큰 재발급 요청 캔슬 ❌');
-                        return EMPTY;
-                    }
-
-                    // 리프레시 토큰 플로우 시작
-                    console.log('토큰 재발급 플로우 시작 👻');
-                    return oauth2Service.refresh();
-                })
-            );
+            // 리프레시 토큰 플로우 시작
+            console.log('토큰 재발급 플로우 시작 👻');
+            return oauth2Service.refresh();
         })
-    )
-
-
+    );
 }

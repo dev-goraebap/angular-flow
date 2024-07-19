@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from "@angular/common";
-import { PLATFORM_ID, inject } from "@angular/core";
+import { PLATFORM_ID, computed, inject, signal } from "@angular/core";
 import { TokenStorage } from "./token.storage";
 import { TokenResource } from "./token.storage.options";
 
@@ -7,28 +7,26 @@ export class BaseTokenStorage implements TokenStorage<TokenResource> {
 
     private readonly platformId = inject(PLATFORM_ID);
 
-    getAccessToken(): string | null {
+    private readonly state = signal<TokenResource>({
+        accessToken: '',
+        refreshToken: ''
+    });
+
+    readonly accessToken = computed(() => {
         if (!isPlatformBrowser(this.platformId)) {
             return null;
         }
+        const { accessToken } = this.state();
+        return accessToken !== '' ? accessToken : localStorage.getItem('NEST_FLOW_ACCESS_TOKEN');
+    });
 
-        const accessToken = localStorage.getItem('NEST_FLOW_ACCESS_TOKEN');
-
-        if (!accessToken) {
-            console.log('No access token found');
-            return null;
-        }
-
-        return accessToken;
-    }
-
-    getRefreshToken(): string | null {
+    readonly refreshToken = computed(() => {
         if (!isPlatformBrowser(this.platformId)) {
             return null;
         }
-
-        return localStorage.getItem('NEST_FLOW_REFRESH_TOKEN');
-    }
+        const { refreshToken } = this.state();
+        return refreshToken !== '' ? refreshToken : localStorage.getItem('NEST_FLOW_REFRESH_TOKEN');
+    });
 
     set(resource: TokenResource) {
         if (!isPlatformBrowser(this.platformId)) {
@@ -38,6 +36,7 @@ export class BaseTokenStorage implements TokenStorage<TokenResource> {
         this.validate(resource);
         localStorage.setItem('NEST_FLOW_ACCESS_TOKEN', resource.accessToken);
         localStorage.setItem('NEST_FLOW_REFRESH_TOKEN', resource.refreshToken);
+        this.state.set(resource);
     }
 
     clear() {
@@ -47,6 +46,10 @@ export class BaseTokenStorage implements TokenStorage<TokenResource> {
 
         localStorage.removeItem('NEST_FLOW_ACCESS_TOKEN');
         localStorage.removeItem('NEST_FLOW_REFRESH_TOKEN');
+        this.state.set({
+            accessToken: '',
+            refreshToken: ''
+        });
     }
 
     private validate(resource: TokenResource) {

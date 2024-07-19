@@ -1,9 +1,9 @@
-import { InjectionToken } from "@angular/core";
+import { InjectionToken, Signal } from "@angular/core";
 import { TokenResource } from "./token.storage.options";
 
 export interface TokenStorage<Resource = TokenResource> {
-    getAccessToken(): string | null | Promise<string | null>;
-    getRefreshToken(): string | null | Promise<string | null>;
+    readonly accessToken: Signal<string | null>;
+    readonly refreshToken: Signal<string | null>;
     set(resource: Resource): void | Promise<void>;
     clear(): void | Promise<void>;
 }

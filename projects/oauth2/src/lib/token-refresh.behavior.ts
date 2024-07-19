@@ -5,6 +5,14 @@ import { promiseSafe } from "./oauth2.utils";
 import { TOKEN_STORAGE } from "./token-storage/token.storage";
 import { TokenResource } from "./token-storage/token.storage.options";
 
+/**
+ * 토큰재발급 요청을 모킹할 때 사용할 수 있는 값입니다.
+ * - httpClient를 통해 토큰 재발급 요청을 수행합니다.
+ * - URL 값으로 `REFRESH_TOKEN_MOCK_URL` 을 사용합니다.
+ * - oauth2 인터셉터는 해당 요청일 경우 작동하지 않습니다.
+ */
+export const REFRESH_TOKEN_MOCK_URL = 'REFRESH_TOKEN_MOCK_URL';
+
 export type RefreshHttpClientOptions = {
     /** 토큰 재발급 요청 메서드 */
     readonly method: 'get' | 'post';
@@ -52,25 +60,20 @@ export abstract class TokenRefreshBehavior<Resource = TokenResource> {
      * - `token storage`의 리프레시 토큰을 추출하여 옵션값에 따라 값을 바인딩합니다.
      */
     protected refreshHttpClient(options: RefreshHttpClientOptions): Observable<Resource> {
+        const { refreshToken } = this.tokenStorage;
+        const headers = new HttpHeaders()
+            .set('Authorization', `Bearer ${refreshToken()}`);
 
-        const promise = promiseSafe(this.tokenStorage.getRefreshToken());
+        const httpClient = new HttpClient(this.httpBackend);
+        if (options.method === 'get') {
+            return httpClient.get<Resource>(options.url, { headers });
+        }
 
-        return from(promise).pipe(
-            switchMap(refreshToken => {
-                const headers = new HttpHeaders()
-                    .set('Authorization', `Bearer ${refreshToken}`);
+        if (options.ifPostOnBody) {
+            return httpClient.post<Resource>(options.url, { refreshToken: refreshToken() });
+        }
 
-                const httpClient = new HttpClient(this.httpBackend);
-                if (options.method === 'get') {
-                    return httpClient.get<Resource>(options.url, { headers });
-                }
-
-                if (options.ifPostOnBody) {
-                    return httpClient.post<Resource>(options.url, { refreshToken });
-                }
-
-                return httpClient.post<Resource>(options.url, null, { headers });
-            }),
+        return httpClient.post<Resource>(options.url, null, { headers }).pipe(
             catchError(res => {
                 const promise = promiseSafe(this.tokenStorage.clear());
                 return from(promise).pipe(

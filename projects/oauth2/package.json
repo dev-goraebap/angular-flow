@@ -1,6 +1,9 @@
 {
   "name": "@angular-flow/oauth2",
+  "description": "OAuth2 flow for Angular",
   "version": "0.9.0",
+  "author": "dev.goraebap",
+  "private": false,
   "peerDependencies": {
     "@angular/common": "^18.1.0",
     "@angular/core": "^18.1.0"

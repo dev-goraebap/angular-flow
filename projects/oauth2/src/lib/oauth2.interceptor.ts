@@ -26,6 +26,13 @@ import { TOKEN_STORAGE } from "./token-storage/token.storage";
  - 인증 실패시 TokenRefreshBehavior를 상속하는 클래스에서 부가적인 마무리작업을 수행할 수 있습니다.  
  */
 export const oauth2Interceptor: HttpInterceptorFn = (req: HttpRequest<any>, next: HttpHandlerFn) => {
+
+    console.log(req.url);
+    if (req.url.includes('REFRESH_TOKENS_MOCK_URL')) {
+        console.log('refresh token mock url 요청 중...');
+        return next(req);
+    }
+
     const oauth2Service = inject(OAuth2Service);
     const bearerTokenStorage = inject(TOKEN_STORAGE);
 

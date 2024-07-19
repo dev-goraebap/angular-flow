@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { TOKEN_STORAGE, TokenResource } from "oauth2";
+import { TOKEN_STORAGE, TokenResource } from "projects/oauth2/src/public-api";
 import { catchError, lastValueFrom, throwError } from "rxjs";
 import { ReqLoginDTO } from "../dto/req-login.dto";
 import { LOGIN_MOCK_URL } from "../interceptors/login-mock.interceptor";

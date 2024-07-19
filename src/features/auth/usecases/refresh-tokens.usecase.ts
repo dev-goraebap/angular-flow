@@ -1,8 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
 import { inject, Injectable } from "@angular/core";
-import { TokenRefreshBehavior, TokenResource } from "oauth2";
+import { REFRESH_TOKEN_MOCK_URL, TokenRefreshBehavior, TokenResource } from "projects/oauth2/src/public-api";
 import { catchError, Observable, throwError } from "rxjs";
-import { REFRESH_TOKENS_MOCK_URL } from "../interceptors/refresh-tokens-mock.interceptor";
 
 @Injectable()
 export class RefreshTokensUsecase extends TokenRefreshBehavior {
@@ -24,9 +23,11 @@ export class RefreshTokensUsecase extends TokenRefreshBehavior {
          * 대신 Observable<TokenResource> 반환 타입을 만족하는 테스트 코드로 대체합니다.
          */
 
+        console.log(this.tokenStorage.refreshToken());
+
         const header = new HttpHeaders()
-            .set('Authorization', `Bearer ${this.tokenStorage.getRefreshToken()}`)
-        return this.httpClient.post<TokenResource>(REFRESH_TOKENS_MOCK_URL, {}, {
+            .set('Authorization', `Bearer ${this.tokenStorage.refreshToken()}`)
+        return this.httpClient.post<TokenResource>(REFRESH_TOKEN_MOCK_URL, {}, {
             headers: header
         }).pipe(
             catchError((res: HttpErrorResponse) => {

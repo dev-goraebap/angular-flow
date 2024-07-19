@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { CredentialExampleViewUI, LoginFormUI, TokenExampleViewUI } from '../features/auth';
+import { CredentialExampleViewUI, ExpiresTokenButtonUI, FetchProfileButtonUI, LoginFormUI, TokenExampleViewUI } from '../features/auth';
 
 @Component({
   selector: 'app-root',
@@ -9,11 +9,11 @@ import { CredentialExampleViewUI, LoginFormUI, TokenExampleViewUI } from '../fea
     RouterOutlet,
     LoginFormUI,
     TokenExampleViewUI,
-    CredentialExampleViewUI
+    CredentialExampleViewUI,
+    ExpiresTokenButtonUI,
+    FetchProfileButtonUI
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-
-}
+export class AppComponent { }

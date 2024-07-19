@@ -1,7 +1,7 @@
-<div class="h-screen flex flex-col items-center p-10">
+<div class="flex flex-col items-center h-screen p-10">
   <div class="w-full max-w-[400px] min-w-[400px]">
     <!-- 로그인 영역 -->
-    <div class="w-full flex flex-col items-center">
+    <div class="flex flex-col items-center w-full">
       <div>로그인을 진행해보세요.</div>
       <div>username: test01</div>
       <div>password: test01</div>
@@ -14,11 +14,11 @@
         <div class="w-full border-t border-gray-300"></div>
       </div>
       <div class="relative flex justify-center">
-        <span class="bg-white px-2 text-sm text-gray-500">Continue</span>
+        <span class="px-2 text-sm text-gray-500 bg-white">Continue</span>
       </div>
     </div>
 
-    <div class="w-full mt-4 flex flex-col items-center">
+    <div class="flex flex-col items-center w-full mt-4">
       <div class="text-sm">
         개발자모드에서 콘솔을 키고 토큰이 있을 때와 없을 때 요청이 어떻게
         달라지는지 확인해보세요.
@@ -28,22 +28,10 @@
 
       <credential-example-view-ui class="w-full" />
 
-      <div class="flex gap-4 w-full mt-6">
-        <button
-          class="ring ring-blue-500 bg-blue-500 w-full rounded-md p-1 text-white text-xs"
-        >
-          엑세스토큰<br />만료
-        </button>
-        <button
-          class="ring ring-purple-500 bg-purple-500 w-full rounded-md p-1 text-white text-xs"
-        >
-          리프레시토큰<br />만료
-        </button>
-        <button
-          class="ring ring-yellow-500 bg-yellow-500 w-full rounded-md p-1 text-white text-xs"
-        >
-          사용자 프로필<br />요청
-        </button>
+      <div class="flex w-full gap-4 mt-6">
+        <expires-token-button-ui token="accessToken" class="flex-1" />
+        <expires-token-button-ui token="refreshToken" class="flex-1" />
+        <fetch-profile-button-ui class="flex-1" />
       </div>
     </div>
   </div>

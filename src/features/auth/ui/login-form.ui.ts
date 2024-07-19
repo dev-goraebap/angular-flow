@@ -1,6 +1,7 @@
 import { Component, inject } from "@angular/core";
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ReqLoginDTO } from "../dto/req-login.dto";
+import { GetProfileUsecase } from "../usecases/get-profile.usecase";
 import { LoginUsecase } from "../usecases/login.usecase";
 
 @Component({
@@ -10,7 +11,8 @@ import { LoginUsecase } from "../usecases/login.usecase";
         ReactiveFormsModule
     ],
     providers: [
-        LoginUsecase
+        LoginUsecase,
+        GetProfileUsecase
     ],
     template: `
     <form 
@@ -41,16 +43,21 @@ export class LoginFormUI {
     readonly formGroup = new FormGroup({
         username: new FormControl('', [Validators.required]),
         password: new FormControl('', [Validators.required])
-    })
+    });
 
     private readonly loginUsecase = inject(LoginUsecase);
+    private readonly getProfileUsecase = inject(GetProfileUsecase);
 
     async onLogin() {
+        console.log('로그인 요청');
         if (this.formGroup.invalid) {
             window.alert('아이디 또는 비밀번호를 확인해주세요.');
             return;
         }
         const result = this.formGroup.value as ReqLoginDTO;
         await this.loginUsecase.execute(result);
+        await this.getProfileUsecase.execute();
+
+        this.formGroup.reset();
     }
 }

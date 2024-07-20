@@ -4,6 +4,7 @@
   "version": "0.9.0",
   "author": "dev.goraebap",
   "private": false,
+  "keywords": ["angular","ng","oauth","oauth2","accessToken","refreshToken","angular flow","angular oauth2"],
   "peerDependencies": {
     "@angular/common": "^18.1.0",
     "@angular/core": "^18.1.0"

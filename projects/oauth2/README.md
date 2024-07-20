@@ -7,6 +7,15 @@ OAuth2 기반의 인증을 도와주는 라이브러리
 ![image](https://github.com/user-attachments/assets/d3beb504-a6e0-4eea-a24d-b4a416a62252)
 
 ## 설정
+
+먼저 `@angular-flow/oauth2` 를 설치합니다.
+
+```
+npm i @angular-flow/oauth2
+```
+
+`app.config.ts` 에 아래 코드를 추가합니다.
+
 ```ts
 // app.config.ts
 ...

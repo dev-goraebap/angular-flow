@@ -1,4 +1,5 @@
 import { computed, signal } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { Preferences } from "@capacitor/preferences";
 import { TokenResource, TokenStorage } from "projects/oauth2/src/public-api";
 import { from, map } from "rxjs";
@@ -18,9 +19,7 @@ export class CapacitorTokenStorage implements TokenStorage {
     private readonly ACT = 'angularFlowAccessToken';
     private readonly RFT = 'angularFlowRefreshToken';
 
-    readonly select = computed(() => this.state());
-
-    constructor() {
+    readonly select = computed(() => {
         // 스토리지에서 데이터 조회
         const act = Preferences.get({
             key: this.ACT
@@ -30,16 +29,17 @@ export class CapacitorTokenStorage implements TokenStorage {
         });
         // promise 를 observable 형태로 변환해서 구독
         const promise = Promise.all([act, rft]);
-        from(promise).pipe(
+        const obs$ = from(promise).pipe(
             map(([actResult, rftResult]) => {
-                // 상태 업데이트
-                this.state.set({
+                return {
                     accessToken: actResult.value ?? '',
                     refreshToken: rftResult.value ?? ''
-                });
+                }
             })
-        ).subscribe();
-    }
+        );
+        const tokens = toSignal(obs$);
+        return tokens() ?? this.state();
+    });
 
     set(resource: TokenResource): void {
         // 상태 업데이트

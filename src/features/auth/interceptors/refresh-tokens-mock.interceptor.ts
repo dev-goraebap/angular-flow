@@ -1,7 +1,8 @@
 import { HttpErrorResponse, HttpHandlerFn, HttpInterceptorFn, HttpRequest, HttpResponse } from "@angular/common/http";
-import { REFRESH_TOKEN_MOCK_URL } from "projects/oauth2/src/public-api";
 import { of, throwError } from "rxjs";
 import { mockTokens } from "../mock";
+
+export const REFRESH_TOKEN_MOCK_URL = 'REFRESH_TOKEN_MOCK_URL';
 
 export const refreshTokensMockInterceptor: HttpInterceptorFn = (
     req: HttpRequest<unknown>,

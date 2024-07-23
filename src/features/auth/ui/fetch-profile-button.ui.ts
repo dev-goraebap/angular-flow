@@ -21,7 +21,7 @@ export class FetchProfileButtonUI {
     private readonly getProfileUsecase = inject(GetProfileUsecase);
 
     async onFetchProfile() {
-        console.log('사용자 프로필 조회 요청');
+        console.debug('사용자 프로필 조회 요청');
         await this.getProfileUsecase.execute();
     }
 }

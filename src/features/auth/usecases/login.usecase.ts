@@ -22,7 +22,7 @@ export class LoginUsecase {
         );
         const res = await lastValueFrom(http$);
 
-        console.log(res);
+        console.debug(res);
 
         // 토큰스토리지에 응답값 반환         
         this.tokenStorage.set(res);

@@ -29,9 +29,10 @@ export class CredentialExampleViewUI {
 
     constructor() {
         afterNextRender(async () => {
-            console.log(this.tokenStorage.accessToken());
-            console.log(this.tokenStorage.refreshToken());
-            if (!this.tokenStorage.accessToken() && !this.tokenStorage.refreshToken()) {
+            const { accessToken, refreshToken } = this.tokenStorage.select();
+            console.log(accessToken);
+            console.log(refreshToken);
+            if (!accessToken || !refreshToken) {
                 return;
             }
             await this.getProfileUsecase.execute();

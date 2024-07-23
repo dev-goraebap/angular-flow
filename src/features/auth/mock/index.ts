@@ -1,4 +1,4 @@
-import { TokenResource } from "oauth2";
+import { TokenResource } from "projects/oauth2/src/public-api";
 import { ReqLoginDTO } from "../dto/req-login.dto";
 import { CredentialState } from "../stores/credential.store";
 

@@ -26,8 +26,8 @@ export const appConfig: ApplicationConfig = {
     ...
     // oauth2 공급자 추가
     provideOauth2({
-      tokenRefreshBehavior: RefreshTokensUsecase // TokenRefreshBehavior를 상속하는 class 추가
-      // customTokenStorage: <TokenStorage 인터페이스를 구현하는 클래스> (선택)
+      refreshBehavior: RefreshTokensUsecase // RefreshBehavior를 구현하는 클래스 등록
+      // tokenStorage: <TokenStorage 인터페이스를 구현하는 클래스> (선택)
     }),
     provideHttpClient(
       withInterceptors([

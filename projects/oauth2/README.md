@@ -44,7 +44,8 @@ export const appConfig: ApplicationConfig = {
 ```ts
 export const appConfig: ApplicationConfig = {
   providers: [
-    ...provideOAuth2WithHttpClient({
+    ...
+    provideOAuth2WithHttpClient({
       refreshBehavior: RefreshTokensUsecase, // 필수등록
       interceptors: authMockInterceptors, // 선택사항
     }),

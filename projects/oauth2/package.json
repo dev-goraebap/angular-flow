@@ -7,11 +7,11 @@
   "keywords": ["angular","ng","oauth","oauth2","accessToken","refreshToken","angular flow","angular oauth2"],
   "peerDependencies": {
     "@angular/common": "^18.1.0",
-    "@angular/core": "^18.1.0"
+    "@angular/core": "^18.1.0",
+    "@capacitor/preferences": "^6.0.1"
   },
   "dependencies": {
-    "tslib": "^2.3.0",
-    "@capacitor/preferences": "^6.0.1"
+    "tslib": "^2.3.0"
   },
   "sideEffects": false
 }

@@ -25,7 +25,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     ...
     // oauth2 공급자 추가
-    provideOauth2({
+    provideOAuth2({
       refreshBehavior: RefreshTokensUsecase // RefreshBehavior를 구현하는 클래스 등록
       // tokenStorage: <TokenStorage 인터페이스를 구현하는 클래스> (선택)
     }),
@@ -53,7 +53,7 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-Oauth2 공급자를 등록하기 위해서 `refreshBehavior` 등록은 필수입니다.
+OAuth2 프로바이더를 등록하기 위해서 `refreshBehavior` 등록은 필수입니다.
 
 `RefreshBehavior` 인터페이스를 구현하는 클래스를 생성하고 `refresh` 메서드의 반환타입을 만족하도록 코드를 작성해야합니다.
 

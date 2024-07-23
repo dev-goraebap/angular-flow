@@ -49,7 +49,7 @@ export class LoginFormUI {
     private readonly getProfileUsecase = inject(GetProfileUsecase);
 
     async onLogin() {
-        console.log('로그인 요청');
+        console.debug('로그인 요청');
         if (this.formGroup.invalid) {
             window.alert('아이디 또는 비밀번호를 확인해주세요.');
             return;

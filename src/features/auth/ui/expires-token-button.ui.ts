@@ -1,6 +1,8 @@
 import { CommonModule } from "@angular/common";
 import { Component, inject, input } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
 import { TOKEN_STORAGE } from "projects/oauth2/src/public-api";
+import { take, tap } from "rxjs";
 
 @Component({
     selector: 'expires-token-button-ui',
@@ -28,15 +30,18 @@ export class ExpiresTokenButtonUI {
     readonly tokenStorage = inject(TOKEN_STORAGE);
 
     onExpiresToken() {
-        console.log('토큰 만료 요청');
+        console.debug('토큰 만료 요청');
+        const { accessToken, refreshToken } = this.tokenStorage.select();
+        console.debug(accessToken);
+        console.debug(refreshToken);
         if (this.token() === 'accessToken') {
             this.tokenStorage.set({
                 accessToken: 'expires_access_token',
-                refreshToken: this.tokenStorage.refreshToken() ?? '',
+                refreshToken: refreshToken ?? '',
             });
         } else {
             this.tokenStorage.set({
-                accessToken: this.tokenStorage.accessToken() ?? '',
+                accessToken: accessToken ?? '',
                 refreshToken: 'expires_refresh_token',
             });
         }

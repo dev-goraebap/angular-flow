@@ -27,12 +27,13 @@ export const appConfig: ApplicationConfig = {
     // oauth2 공급자 추가
     provideOAuth2({
       refreshBehavior: RefreshTokensUsecase // RefreshBehavior를 구현하는 클래스 등록
-      // tokenStorage: <TokenStorage 인터페이스를 구현하는 클래스> (선택)
+      // tokenStorage: <TokenStorage 인터페이스를 구현하는 클래스> (선택) 
+      // 하이브리드웹앱에서는 제공되는 `CapacitorStorage`로 등록해주시면 됩니다.
     }),
     provideHttpClient(
       withInterceptors([
         // oauth2 인터셉터 추가
-        oauth2Interceptor
+        oauth2FlowInterceptor
       ])
     ),
   ]
@@ -57,6 +58,9 @@ OAuth2 프로바이더를 등록하기 위해서 `refreshBehavior` 등록은 필
 
 `RefreshBehavior` 인터페이스를 구현하는 클래스를 생성하고 `refresh` 메서드의 반환타입을 만족하도록 코드를 작성해야합니다.
 
+- refresh 메서드는 OAuth2 내부 시스템에서 호출 됩니다. 이 때 인자값으로 현재 시점의 refreshToken을 넘기기 때문에
+해당 값을 활용하여 요청을 보낼 수 있습니다.
+
 ```ts
 @Injectable()
 export class RefreshTokensUsecase implements RefreshBehavior {
@@ -65,10 +69,7 @@ export class RefreshTokensUsecase implements RefreshBehavior {
   // @angular-flow/oauth2 에서 설정된 토큰 스토리지 주입
   private readonly tokenStorage = inject(TOKEN_STORAGE);
 
-  refresh(): Observable<TokenResource> {
-    // 토큰 스토리지로부터 리프레시토큰 받아오기
-    const { refreshToken } = this.tokenStorage.select();
-
+  refresh(refreshToken: string): Observable<TokenResource> {
     // 백엔드와 약속된 방식으로 http 호출
     const header = new HttpHeaders()
       .set("Authorization", `Bearer ${refreshToken}`);
@@ -92,6 +93,9 @@ export class RefreshTokensUsecase implements RefreshBehavior {
 
 예를 들어, 로그인 기능을 통해 토큰 리소스를 성공적으로 전달 받을 경우 제공되는 `TOKEN_STORAGE` 프로바이더를 활용하여 토큰 리소스를 저장합니다.
 
+- 토큰스토리지는 하이브리드 앱에서 주로 사용되는 저장소 라이브러리인 `Capacitor Preference` 까지 대응하기 때문에 제공되는 메서드들은 
+모두 `Promise` 반환타입을 가집니다.
+
 ```ts
 @Injectable()
 export class LoginUsecase {
@@ -110,7 +114,7 @@ export class LoginUsecase {
     const res = await lastValueFrom(http$);
 
     // 토큰스토리지에 응답값 반환
-    this.tokenStorage.set(res);
+    await this.tokenStorage.set(res);
   }
 }
 ```

@@ -1,4 +1,3 @@
-import { computed, signal } from "@angular/core";
 import { TokenResource, TokenStorage } from "./token-storage";
 
 /**
@@ -8,38 +7,25 @@ import { TokenResource, TokenStorage } from "./token-storage";
  */
 export class BaseTokenStorage implements TokenStorage {
 
-    private readonly state = signal<TokenResource>({
-        accessToken: '',
-        refreshToken: ''
-    });
-
     private readonly ACT = 'angularFlowAccessToken';
     private readonly RFT = 'angularFlowRefreshToken';
 
-    readonly select = computed(() => this.state());
-
-    constructor() {
-        const act = window.localStorage.getItem(this.ACT);
-        const rft = window.localStorage.getItem(this.RFT);
-
-        this.state.set({
-            accessToken: act ?? '',
-            refreshToken: rft ?? ''
-        });
+    async select() {
+        const accessToken = window.localStorage.getItem(this.ACT);
+        const refreshToken = window.localStorage.getItem(this.RFT);
+        return {
+            accessToken: accessToken ?? '',
+            refreshToken: refreshToken ?? ''
+        };
     }
 
-    set(resource: TokenResource): void {
+    async set(resource: TokenResource) {
         window.localStorage.setItem(this.ACT, resource.accessToken);
         window.localStorage.setItem(this.RFT, resource.refreshToken);
-        this.state.set(resource);
     }
 
-    removes(): void {
+    async removes() {
         window.localStorage.removeItem(this.ACT);
         window.localStorage.removeItem(this.RFT);
-        this.state.set({
-            accessToken: '',
-            refreshToken: ''
-        });
     }
 }

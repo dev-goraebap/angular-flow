@@ -10,7 +10,7 @@ import { TokenResource } from "./token-storage/token-storage";
  * @publicApi
  */
 export interface RefreshBehavior {
-    refresh(): Observable<TokenResource>;
+    refresh(refreshToken: string): Observable<TokenResource>;
 }
 
 export const REFRESH_BEHAVIOR = new InjectionToken<RefreshBehavior>('RefreshBehavior');

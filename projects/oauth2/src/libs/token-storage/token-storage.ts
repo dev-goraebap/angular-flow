@@ -1,4 +1,4 @@
-import { InjectionToken, Signal } from "@angular/core";
+import { InjectionToken } from "@angular/core";
 
 /** @publicApi */
 export type TokenResource = {
@@ -19,18 +19,18 @@ export interface TokenStorage {
     /**
      * Note: 시그널 형태의 토큰 리소스를 반환합니다.
      */
-    readonly select: Signal<TokenResource>;
+    select(): Promise<TokenResource>;
 
     /**
      * Note: `TokenResource` 타입 유형의 객체를 받아
      * 저장합니다.
      */
-    set(resource: TokenResource): void;
+    set(resource: TokenResource): Promise<void>;
 
     /**
      * Note: 토큰 리소스를 일괄 삭제합니다.
      */
-    removes(): void;
+    removes(): Promise<void>;
 }
 
 export const TOKEN_STORAGE = new InjectionToken<TokenStorage>('TokenStorage');

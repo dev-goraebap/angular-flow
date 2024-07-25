@@ -1,4 +1,4 @@
-import { afterNextRender, Component, inject } from "@angular/core";
+import { Component, inject } from "@angular/core";
 import { TOKEN_STORAGE } from "projects/oauth2/src/public-api";
 import { CredentialStore } from "../stores/credential.store";
 import { GetProfileUsecase } from "../usecases/get-profile.usecase";
@@ -24,18 +24,4 @@ export class CredentialExampleViewUI {
     readonly tokenStorage = inject(TOKEN_STORAGE);
 
     readonly profile = this.credentialStore.select;
-
-    private readonly getProfileUsecase = inject(GetProfileUsecase);
-
-    constructor() {
-        afterNextRender(async () => {
-            const { accessToken, refreshToken } = this.tokenStorage.select();
-            console.log(accessToken);
-            console.log(refreshToken);
-            if (!accessToken || !refreshToken) {
-                return;
-            }
-            await this.getProfileUsecase.execute();
-        });
-    }
 }

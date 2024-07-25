@@ -23,5 +23,8 @@ export class FetchProfileButtonUI {
     async onFetchProfile() {
         console.debug('사용자 프로필 조회 요청');
         await this.getProfileUsecase.execute();
+
+        const event = new CustomEvent('UPDATE_TOKENS');
+        document.dispatchEvent(event);
     }
 }

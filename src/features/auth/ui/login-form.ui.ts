@@ -58,6 +58,9 @@ export class LoginFormUI {
         await this.loginUsecase.execute(result);
         await this.getProfileUsecase.execute();
 
+        const event = new CustomEvent('UPDATE_TOKENS');
+        document.dispatchEvent(event);
+
         this.formGroup.reset();
     }
 }

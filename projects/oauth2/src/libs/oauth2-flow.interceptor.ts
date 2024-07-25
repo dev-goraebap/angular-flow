@@ -8,7 +8,7 @@ import { TOKEN_STORAGE } from "./token-storage/token-storage";
  * @publicApi
  */
 const skipOAuth2FlowToken = new HttpContextToken(() => false);
-export const skipOAuth2Flow = new HttpContext().set(skipOAuth2FlowToken, true)
+export const skipOAuth2Flow = new HttpContext().set(skipOAuth2FlowToken, true);
 
 /**
  * @publicApi

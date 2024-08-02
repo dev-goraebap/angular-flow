@@ -1,5 +1,5 @@
 import { Preferences } from "@capacitor/preferences";
-import { TokenResource, TokenStorage } from "projects/oauth2/src/public-api";
+import { TokenResource, TokenStorage } from "./token-storage";
 
 /**
  * Note: capacitor preference API 를 사용하는 기본제공 토큰스토리지

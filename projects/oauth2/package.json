@@ -1,7 +1,7 @@
 {
   "name": "@angular-flow/oauth2",
   "description": "OAuth2 flow for Angular 🐱",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "author": "dev.goraebap",
   "private": false,
   "keywords": [
